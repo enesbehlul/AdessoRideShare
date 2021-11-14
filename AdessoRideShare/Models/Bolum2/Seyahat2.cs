@@ -95,6 +95,25 @@ namespace AdessoRideShare.Models.Bolum2
                     }
                     break;
                 case (int)Yonler.YukariSag:
+                    int k = 0;
+                    for (k = Nereden; k >= Nereye - modNereye; k = k - 19)
+                    {
+                        komsularKumesi.Add(k);
+                        var iMod = k % 20;
+                        if (iMod - 1 >= 0)
+                            komsularKumesi.Add(k - 1);
+                        if (iMod + 1 <= 19)
+                            komsularKumesi.Add(k + 1);
+                    }
+
+                    for (int j = k + 19; j <= Nereye; j++)
+                    {
+                        komsularKumesi.Add(j);
+                        if (j - 20 >= 0)
+                            komsularKumesi.Add(j - 20);
+                        if (j + 20 <= 199)
+                            komsularKumesi.Add(k + 20);
+                    }
                     break;
                 case (int)Yonler.YukariSol:
                     break;
