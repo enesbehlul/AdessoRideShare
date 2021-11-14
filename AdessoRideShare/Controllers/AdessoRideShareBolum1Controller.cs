@@ -24,6 +24,7 @@ namespace AdessoRideShare.Controllers
             return kullanici.ID;
         }
 
+        // Kullanıcı sisteme seyahat planını Nereden, Nereye, Tarih ve Açıklama, Koltuk Sayısı bilgileri ile ekleyebilmeli
         [HttpPost]
         public IActionResult SeyahatOlustur([FromBody] Seyahat seyahat)
         {
@@ -53,6 +54,7 @@ namespace AdessoRideShare.Controllers
             return Ok(seyahat);
         }
 
+        //Kullanıcı tanımladığı seyahat planını yayına alabilmeli ve yayından kaldırabilmeli
         [HttpPut]
         public IActionResult SeyahatYayinGuncelle([FromBody] RSeyahatYayinGuncelle req)
         {
@@ -66,6 +68,7 @@ namespace AdessoRideShare.Controllers
             return Ok();
         }
 
+        //Kullanıcılar sistemdeki yayında olan seyahat planlarını Nereden ve Nereye bilgileri ile aratabilmeli
         [HttpGet]
         public IActionResult SeyahatAra([FromQuery] string Nereden, [FromQuery] string Nereye)
         {
@@ -83,6 +86,7 @@ namespace AdessoRideShare.Controllers
             return Ok(sonuc);
         }
 
+        // Kullanıcılar yayında olan seyehat planlarına "Koltuk Sayısı" dolana kadar katılım isteği gönderebilmeli
         [HttpPost]
         public IActionResult SeyahataKatil([FromBody] RSeyahataKatil req)
         {
