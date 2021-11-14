@@ -60,5 +60,23 @@ namespace AdessoRideShare.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        public IActionResult SeyahatAra([FromQuery] string Nereden, [FromQuery] string Nereye)
+        {
+            var NeredenExist = !string.IsNullOrEmpty(Nereden);
+            var NereyeExist = !string.IsNullOrEmpty(Nereye);
+
+            if (!NeredenExist && !NereyeExist)
+                return BadRequest("Gecersiz istek parametreleri.");
+
+            var sonuc = 
+            seyahatlar.Where(x =>   x.Yayin &&
+                                    (!NeredenExist || x.Nereden.ToLower().Contains(Nereden.ToLower())) && 
+                                    (!NereyeExist || x.Nereye.ToLower().Contains(Nereye.ToLower()))).ToList();
+
+            return Ok(sonuc);
+        }
+
+
     }
 }
