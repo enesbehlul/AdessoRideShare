@@ -77,9 +77,9 @@ namespace AdessoRideShare.Models.Bolum2
         Asagi = 4,
         Sag = 8,
         Sol = 16,
-        YukariSag = 32,
-        YukariSol = 64,
-        AsagiSag = 128,
-        AsagiSol = 256
+        YukariSag = 10,
+        YukariSol = 18,
+        AsagiSag = 12,
+        AsagiSol = 20
     }
 }
