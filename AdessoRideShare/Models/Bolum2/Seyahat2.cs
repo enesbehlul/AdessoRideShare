@@ -19,11 +19,12 @@ namespace AdessoRideShare.Models.Bolum2
 
         public void GuzergahOlustur()
         {
+            int k = 0;
+
             int yon = 0;
 
             var modNereden = Nereden % 20;
             var modNereye = Nereye % 20;
-            var modFark = modNereden - modNereye; // sag ya da sol yon tayini
 
             if (modNereden > modNereye)
                 yon += (int)Yonler.Sol;
@@ -33,8 +34,6 @@ namespace AdessoRideShare.Models.Bolum2
 
             var yukseklikNereden = Nereden / 20;
             var yukseklikNereye = Nereye / 20;
-
-            var yukseklikFark = Math.Abs(yukseklikNereden - yukseklikNereye);
 
             if (yukseklikNereden > yukseklikNereye)
                 yon += (int)Yonler.Yukari;
@@ -95,14 +94,13 @@ namespace AdessoRideShare.Models.Bolum2
                     }
                     break;
                 case (int)Yonler.YukariSag:
-                    int k = 0;
                     for (k = Nereden; k >= Nereye - modNereye; k = k - 19)
                     {
                         komsularKumesi.Add(k);
-                        var iMod = k % 20;
-                        if (iMod - 1 >= 0)
+                        var kMod = k % 20;
+                        if (kMod - 1 >= 0)
                             komsularKumesi.Add(k - 1);
-                        if (iMod + 1 <= 19)
+                        if (kMod + 1 <= 19)
                             komsularKumesi.Add(k + 1);
                     }
 
@@ -112,18 +110,80 @@ namespace AdessoRideShare.Models.Bolum2
                         if (j - 20 >= 0)
                             komsularKumesi.Add(j - 20);
                         if (j + 20 <= 199)
-                            komsularKumesi.Add(k + 20);
+                            komsularKumesi.Add(j + 20);
                     }
                     break;
                 case (int)Yonler.YukariSol:
+                    for (k = Nereden; k >= Nereye - modNereye; k = k - 21)
+                    {
+                        komsularKumesi.Add(k);
+                        var iMod = k % 20;
+                        if (iMod - 1 >= 0)
+                            komsularKumesi.Add(k - 1);
+                        if (iMod + 1 <= 19)
+                            komsularKumesi.Add(k + 1);
+                    }
+
+                    for (int j = k + 21; j >= Nereye; j--)
+                    {
+                        komsularKumesi.Add(j);
+                        if (j - 20 >= 0)
+                            komsularKumesi.Add(j - 20);
+                        if (j + 20 <= 199)
+                            komsularKumesi.Add(j + 20);
+                    }
                     break;
                 case (int)Yonler.AsagiSag:
+                    for (k = Nereden; k < Nereye; k = k+21)
+                    {
+                        komsularKumesi.Add(k);
+
+                        if (k - 20 >= 0)
+                            komsularKumesi.Add(k - 20);
+                        if (k + 20 <= 199)
+                            komsularKumesi.Add(k + 20);
+                    }
+
+                    for (int j = k - 21; j <= Nereye; j++)
+                    {
+                        komsularKumesi.Add(j);
+                        if (j - 1 >= 0)
+                            komsularKumesi.Add(j - 1);
+                        if (j + 1 <= 19)
+                            komsularKumesi.Add(j + 1);
+                    }
                     break;
                 case (int)Yonler.AsagiSol:
+
+                    for (k = Nereden; k < Nereye; k = k + 19)
+                    {
+                        komsularKumesi.Add(k);
+
+                        if (k - 20 >= 0)
+                            komsularKumesi.Add(k - 20);
+                        if (k + 20 <= 199)
+                            komsularKumesi.Add(k + 20);
+                    }
+
+                    for (int j = k; j >= Nereye; j--)
+                    {
+                        komsularKumesi.Add(j);
+                        if (j - 1 >= 0)
+                            komsularKumesi.Add(j - 1);
+                        if (j + 1 <= 19)
+                            komsularKumesi.Add(j + 1);
+                    }
                     break;
                 default:
                     break;
             }
+
+            GuzergahtakiSehirler = komsularKumesi.ToList();
+            //komsularKumesi.ToList().Sort();
+            //var asas = 0;
+            //var xx = komsularKumesi.ToList();
+            //xx.Sort();
+            //var xxx = 0;
 
         }
     }

@@ -20,6 +20,12 @@ namespace AdessoRideShare.Controllers
         public IActionResult SeyahatOlustur([FromBody] RSeyahatOlustur req)
         {
             Seyahat2 s = new Seyahat2();
+            if (req.Nereden < 0 || req.Nereden > 199)
+                return BadRequest("Nereden 0 ila 199 arasında olabilir.");
+            if (req.Nereye < 0 || req.Nereye > 199)
+                return BadRequest("Nereye 0 ila 199 arasında olabilir.");
+
+
             s.Nereden = req.Nereden;
             s.Nereye = req.Nereye;
             s.GuzergahOlustur();
