@@ -16,6 +16,14 @@ namespace AdessoRideShare.Controllers
         public static List<Seyahat> seyahatlar = new();
         public static List<SeyahatKatilim> seyahatKatilimlar = new();
 
+        private int KullaniciOlustur()
+        {
+            var kullaniciCount = kullanicilar.Count;
+            var kullanici = new Kullanici { ID = ++kullaniciCount };
+            kullanicilar.Add(kullanici);
+            return kullanici.ID;
+        }
+
         [HttpPost]
         public IActionResult SeyahatOlustur([FromBody] Seyahat seyahat)
         {
@@ -28,10 +36,8 @@ namespace AdessoRideShare.Controllers
 
             if (seyahat.KullaniciId == 0)
             {
-                var kullaniciCount = kullanicilar.Count;
-                var kullanici = new Kullanici { ID = ++kullaniciCount };
-                kullanicilar.Add(kullanici);
-                seyahat.KullaniciId = kullanici.ID;
+
+                seyahat.KullaniciId = KullaniciOlustur();
             }
             else
             {
@@ -69,14 +75,55 @@ namespace AdessoRideShare.Controllers
             if (!NeredenExist && !NereyeExist)
                 return BadRequest("Gecersiz istek parametreleri.");
 
-            var sonuc = 
-            seyahatlar.Where(x =>   x.Yayin &&
-                                    (!NeredenExist || x.Nereden.ToLower().Contains(Nereden.ToLower())) && 
+            var sonuc =
+            seyahatlar.Where(x => x.Yayin &&
+                                    (!NeredenExist || x.Nereden.ToLower().Contains(Nereden.ToLower())) &&
                                     (!NereyeExist || x.Nereye.ToLower().Contains(Nereye.ToLower()))).ToList();
 
             return Ok(sonuc);
         }
 
+        [HttpPost]
+        public IActionResult SeyahataKatil([FromBody] RSeyahataKatil req)
+        {
+            var seyahatId = req.SeyahatId;
+            var kullaniciId = req.KullaniciId;
 
+            var seyahat = seyahatlar.FirstOrDefault(x => x.ID == seyahatId && x.Yayin);
+            if (seyahat is null)
+                return BadRequest("Boyle bir seyahat bulunamadi. ID: " + seyahatId);
+
+            if (kullaniciId == 0)
+                kullaniciId = KullaniciOlustur();
+            else
+            {
+                var isKullaniciExist = kullanicilar.Any(x => x.ID == kullaniciId);
+                if (!isKullaniciExist)
+                    return BadRequest("Boyle bir kullanici bulunamadi. ID: " + kullaniciId);
+                if (seyahat.KullaniciId == kullaniciId)
+                    return BadRequest("Size ait olan seyahate katilimci olamazsiniz.");
+            }
+
+            var varOlanKatilimlar = seyahatKatilimlar.Where(x => x.SeyehatId == seyahatId).ToList();
+            if (varOlanKatilimlar.Any(x => x.KullaniciId == kullaniciId))
+                return Ok("Bu seyahate zaten kayitlisiniz.");
+
+            var doluKoltukSayisi = varOlanKatilimlar.Count;
+            if (seyahat.KoltukSayisi == doluKoltukSayisi)
+                return BadRequest("Bu seyahatteki tum koltuklar dolu.");
+
+            var seyahatKatilimSayisi = seyahatKatilimlar.Count;
+            var seyahatKatilim = new SeyahatKatilim
+            {
+                ID = ++seyahatKatilimSayisi,
+                KullaniciId = kullaniciId,
+                SeyehatId = seyahatId
+            };
+
+            seyahatKatilimlar.Add(seyahatKatilim);
+
+            return Ok(seyahatKatilim);
+
+        }
     }
 }
