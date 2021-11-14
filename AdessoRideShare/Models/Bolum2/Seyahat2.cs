@@ -71,7 +71,17 @@ namespace AdessoRideShare.Models.Bolum2
                             komsularKumesi.Add(i + 1);
                     }
                     break;
+
                 case (int)Yonler.Sol:
+                    for (int i = Nereden; i >= Nereye; i--)
+                    {
+                        komsularKumesi.Add(i);
+
+                        if (i - 20 >= 0)
+                            komsularKumesi.Add(i - 20);
+                        if (i + 20 <= 199)
+                            komsularKumesi.Add(i + 20);
+                    }
                     break;
                 case (int)Yonler.Sag:
                     break;
