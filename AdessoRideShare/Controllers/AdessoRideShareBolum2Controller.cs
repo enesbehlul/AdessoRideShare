@@ -1,5 +1,6 @@
 ﻿using AdessoRideShare.Models;
 using AdessoRideShare.Models.Bolum2;
+using AdessoRideShare.Models.RequestModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -16,8 +17,12 @@ namespace AdessoRideShare.Controllers
         public static List<Seyahat2> seyahatlar = new();
 
         [HttpPost]
-        public IActionResult SeyahatOlustur()
+        public IActionResult SeyahatOlustur([FromBody] RSeyahatOlustur req)
         {
+            Seyahat2 s = new Seyahat2();
+            s.Nereden = req.Nereden;
+            s.Nereye = req.Nereye;
+            s.GuzergahOlustur();
             return Ok();
         }
     }

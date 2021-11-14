@@ -41,15 +41,24 @@ namespace AdessoRideShare.Models.Bolum2
             else if (yukseklikNereden > yukseklikNereye)
                 yon += (int)Yonler.Asagi;
 
+            var komsularKumesi = new HashSet<int>();
 
             switch (yon)
             {
                 case (int)Yonler.Yukari:
-                    for (int i = Nereden; i < Nereye; i = i - 20)
+                    
+                    for (int i = Nereden; i >= Nereye; i = i - 20)
                     {
+                        komsularKumesi.Add(i);
 
+                        var iMod = i % 20;
+                        if (iMod - 1 >= 0)
+                            komsularKumesi.Add(i - 1);
+                        if (iMod + 1 <= 19)
+                            komsularKumesi.Add(i + 1);
                     }
                     break;
+
                 case (int)Yonler.Asagi:
                     break;
                 case (int)Yonler.Sol:
